@@ -35,9 +35,12 @@ urlpatterns = [
     url(r'^forget/$',ForgetPwdView.as_view(),name="forget_pwd"),
     url(r'^reset/(?P<active_code>.*)/$',ResetView.as_view(),name="reset_pwd"),
     url(r'^modify_pwd/$',ModifyPwdView.as_view(),name="modify_pwd"),
-    #机构列表页
-    url(r'^org_list/$',OrgView.as_view(),name="org_list"),
 
+    #课程机构url配置
+    url(r'^org/', include('organization.urls',namespace="org")),
+
+
+
+    #media文件
     url(r'^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT})
-
 ]
