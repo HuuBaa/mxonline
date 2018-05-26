@@ -113,6 +113,7 @@ class OrgCourseView(View):
         if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
                 has_fav = True
+
         all_courses = course_org.course_set.all()
         return render(request, "org-detail-course.html",
                       {
@@ -143,7 +144,7 @@ class OrgDescView(View):
 
 class OrgTeacherView(View):
     '''
-    机构教师列表页
+    讲师列表页
     '''
 
     def get(self, request, org_id):
