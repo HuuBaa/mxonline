@@ -43,7 +43,6 @@ class OrgView(View):
             elif sort=="courses":
                 all_orgs = all_orgs.order_by("-course_nums")
 
-
         org_nums = all_orgs.count()
         # 对课程机构进行分页
         try:

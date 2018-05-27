@@ -15,19 +15,19 @@ class CourseAdmin(object):
 
 
 class LessonAdmin(object):
-    list_display = ['course', 'name', 'add_time']
+    list_display = ['name','course',  'add_time']
     search_fields = ['course__name', 'name']
     list_filter = ['course__name', 'name', 'add_time']  # 外键的name字段用于筛选
 
 
 class VideoAdmin(object):
-    list_display = ['lesson', 'name', 'add_time']
+    list_display = ['name','lesson','add_time']
     search_fields = ['lesson__name', 'name']
     list_filter = ['lesson__name', 'name', 'add_time']
 
 
 class CourseResourceAdmin(object):
-    list_display = ['course', 'name', 'download', 'add_time']
+    list_display = ['name','course',  'download', 'add_time']
     search_fields = ['course__name', 'name', 'download']
     list_filter = ['course__name', 'name', 'download', 'add_time']
 

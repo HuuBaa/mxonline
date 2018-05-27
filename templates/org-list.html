@@ -4,7 +4,9 @@
     课程机构列表-慕学网
 {% endblock %}
 
-
+{% block active_org %}
+    active
+{% endblock %}
 {% block bread %}
 <section>
         <div class="wp">
@@ -121,8 +123,6 @@
                 <li class="long"><a href="?{{ all_orgs.next_page_number.querystring }}" class="next long">下一页&rsaquo;&rsaquo;</a></li>
             {% endif %}
             </ul>
-
-
         </div>
 		</div>
 	</div>
