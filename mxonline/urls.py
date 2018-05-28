@@ -41,7 +41,7 @@ urlpatterns = [
 
     #课程相关url配置
     url(r'^course/', include('courses.urls',namespace="course")),
-    
+
     #media文件
     url(r'^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT})
 ]

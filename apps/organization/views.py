@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.http import  HttpResponse
 
-from .models import CourseOrg, CityDict
+from .models import CourseOrg, CityDict,Teacher
 from courses.models import Course
 from operation.models import UserFavorite
 
@@ -190,3 +190,56 @@ class AddFavView(View):
                 return HttpResponse('{"status":"success","msg":"已收藏"}', content_type="application/json")
             else:
                 return HttpResponse('{"status":"fail","msg":"收藏错误"}', content_type="application/json")
+
+class TeacherListView(View):
+    '''
+    课程讲师列表页
+    '''
+    def get(self,request):
+        all_teachers=Teacher.objects.all()
+
+        # 排序
+        sort = request.GET.get("sort", "")
+        if sort:
+            if sort == "hot":
+                all_teachers = all_teachers.order_by("-click_nums")
+
+        sorted_teachers=Teacher.objects.all().order_by("-click_nums")[:3]
+
+        # 对机构讲师进行分页
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 1, request=request)
+        teachers = p.page(page)
+
+        return render(request,"teachers-list.html",{
+            "all_teachers":teachers,
+            "sorted_teachers":sorted_teachers,
+            "sort":sort
+        })
+
+class TeacherDetailView(View):
+    def get(self,request,teacher_id):
+        teacher=Teacher.objects.get(id=int(teacher_id))
+        all_coureses=teacher.course_set.all()
+        sorted_teachers = Teacher.objects.all().order_by("-click_nums")[:3]
+
+        has_fav_teacher = False
+        has_fav_org = False
+
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=3):
+                has_fav_teacher = True
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.org.id, fav_type=2):
+                has_fav_org = True
+
+        return  render(request,"teacher-detail.html",{
+            "teacher":teacher,
+            "sorted_teachers": sorted_teachers,
+            "all_coureses":all_coureses,
+            "has_fav_teacher":has_fav_teacher,
+            "has_fav_org":has_fav_org
+            })
