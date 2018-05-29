@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import  HttpResponse
+from django.db.models import Q
 
 from .models import CourseOrg, CityDict,Teacher
 from courses.models import Course
@@ -22,8 +23,16 @@ class OrgView(View):
         #课程
         all_orgs = CourseOrg.objects.all()
         hot_orgs= all_orgs.order_by("-click_nums")[:3]
+
+        keywords = request.GET.get("keywords", "")
+        if keywords:
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=keywords) | Q(desc__icontains=keywords))
+
         #城市
         all_citys = CityDict.objects.all()
+
+
 
         #取出筛选城市
         city_id=request.GET.get("city","")
@@ -197,6 +206,13 @@ class TeacherListView(View):
     '''
     def get(self,request):
         all_teachers=Teacher.objects.all()
+
+        keywords = request.GET.get("keywords", "")
+        if keywords:
+            all_teachers = all_teachers.filter(
+                Q(name__icontains=keywords) |
+                Q(work_company__icontains=keywords) |
+                Q(work_position__icontains=keywords))
 
         # 排序
         sort = request.GET.get("sort", "")

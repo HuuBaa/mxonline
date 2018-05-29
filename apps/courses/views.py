@@ -2,12 +2,14 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
-
+from django.db.models import Q
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from operation.models import UserFavorite,CourseComments,UserCourse
+
 from .models import Course,CourseResource
 from utils.mixin_utils import LoginRequiredMixin
+
 # Create your views here.
 
 class CourseListView(View):
@@ -15,6 +17,11 @@ class CourseListView(View):
         all_courses=Course.objects.order_by("-add_time").all()
 
         hot_courses=Course.objects.order_by("-click_nums").all()[:3]
+
+        keywords=request.GET.get("keywords", "")
+        if keywords:
+            all_courses=all_courses.filter(Q(name__icontains=keywords)|Q(desc__icontains=keywords)|Q(detail__icontains=keywords))
+
 
         # 课程排序
         sort = request.GET.get("sort", "")
