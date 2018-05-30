@@ -99,7 +99,7 @@ $(function(){
                         title:'提交成功',
                         h2:'修改密码成功，请重新登录!',
                     });
-                    Dml.fun.winReload();
+                    Dml.fun.winReload("/login/?next=/users/info/");
                 }else if(data.msg){
                     Dml.fun.showValidateError($("#pwd"), data.msg);
                     Dml.fun.showValidateError($("#repwd"), data.msg);

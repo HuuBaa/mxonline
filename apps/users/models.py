@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from datetime import datetime
 
+from django.db.models import Q
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -24,11 +25,15 @@ class UserProfile(AbstractUser):
     def __unicode__(self):
         return "用户：{0}".format(self.username)
 
+    def get_unread_message(self):
+        from operation.models import UserMessage
+        return  UserMessage.objects.filter(Q(user=self.id,has_read=False)|Q(user=0,has_read=False)).count()
+
 
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name=u"验证码")
     email = models.EmailField(max_length=50, verbose_name=u"邮箱")
-    send_type = models.CharField(choices=(("register", u"注册"), ("forget", u"找回密码")), max_length=10,verbose_name=u"验证码类型")
+    send_type = models.CharField(choices=(("register", u"注册"), ("forget", u"找回密码"),("update_email",u"修改邮箱")), max_length=20,verbose_name=u"验证码类型")
     send_time = models.DateTimeField(default=datetime.now,verbose_name=u"发送时间")
 
     class Meta:
