@@ -47,5 +47,10 @@ urlpatterns = [
     url(r'^users/', include('users.urls',namespace="users")),
 
     #media文件
-    url(r'^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT})
+    url(r'^media/(?P<path>.*)$', serve,{"document_root":MEDIA_ROOT}),
+    #static文件
+    #url(r'^static/(?P<path>.*)$', serve,{"document_root":STATIC_ROOT})
 ]
+
+handler404='users.views.page_not_found'
+handler500='users.views.page_error'
