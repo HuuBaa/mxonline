@@ -38,9 +38,26 @@ class Course(models.Model):
     def get_course_lesson(self):
         return self.lesson_set.all()
 
+    def get_course_lesson_num(self):
+        return self.lesson_set.all().count()
+
+    get_course_lesson_num.short_description="章节数"
+
+    def go_to(self):
+        from django.utils.safestring import  mark_safe
+        return mark_safe("<a href='http://www.ioboom.com/'>跳转</a>")
+
+    go_to.short_description="跳转"
+
     def __unicode__(self):
         return "课程：{0}".format(self.name)
 
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = "轮播课程"
+        verbose_name_plural = verbose_name
+        proxy=True #不生成表
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, verbose_name=u"课程")
